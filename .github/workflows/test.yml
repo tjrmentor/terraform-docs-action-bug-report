@@ -1,0 +1,42 @@
+name: Testing terraform-docs github action
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Test
+    runs-on: utuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@3d8debd658c92063839bc97da5c2427100420dec
+        with:
+          terraform_version: 1.0.3
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_REGISTRY_API_KEY }}
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: |
+          terraform init
+          terraform validate
+      
+      - name: Checkout head
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Use terraform-docs to push changes back to PR
+        uses: terraform-docs/gh-actions@main
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
