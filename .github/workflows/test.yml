@@ -8,7 +8,7 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: utuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -34,7 +34,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Use terraform-docs to push changes back to PR
-        uses: terraform-docs/gh-actions@main
+        uses: HylandSoftware/terraform-docs@main
         with:
           working-dir: .
           output-file: README.md
