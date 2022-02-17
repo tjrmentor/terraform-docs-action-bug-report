@@ -34,7 +34,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Use terraform-docs to push changes back to PR
-        uses: HylandSoftware/terraform-docs@main
+        uses: HylandSoftware/terraform-docs@4deb59f9406bf81f5ab594d0cc3a0402c786efe4
         with:
           working-dir: .
           output-file: README.md
